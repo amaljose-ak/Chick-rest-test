@@ -2,13 +2,15 @@ const adminC = require('../models/admin')
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 const { findOne } = require('../models/admin')
+const foodModel = require('../models/food')
+
 
 
 const Functions = {
     addAdmin: async function (data) {
 
         const adminExist = await adminC.findOne({
-            email:data.email,
+            email: data.email,
         })
         if (adminExist) return "admin exist"
 
@@ -19,7 +21,7 @@ const Functions = {
 
             const admin = new adminC({
                 name: data.name,
-                email:data.email,
+                email: data.email,
                 password: hashedPswrd
 
             })
@@ -34,11 +36,11 @@ const Functions = {
     },
     Login: async (data) => {
         const userexist = await adminC.findOne({
-            email:data.email,
+            email: data.email,
         })
-console.log(userexist);
+        console.log(userexist);
         if (!userexist) {
-            
+
             return {
                 statuscode: 401,
                 message: 'No account found',
@@ -59,30 +61,75 @@ console.log(userexist);
 
             try {
                 const tolken = await jwt.sign({ _id: userexist._id, }, process.env.SECRET)
-                return{
-                    statuscode:201,
-                    message:'Login Succcesfull',
-                    success:true,
-                    token:tolken
+                return {
+                    statuscode: 201,
+                    message: 'Login Succcesfull',
+                    success: true,
+                    token: tolken
 
                 }
 
-                
+
             } catch (error) {
                 console.log(error.toString());
 
 
-            }  
+            }
         }
 
 
     },
-    checkAdmin: async function(check){
-        let doCheck= await adminC.findById(check)
-        console.log(doCheck)
+    checkAdmin: async function (check) {
+        let doCheck = await adminC.findById(check)
+        if (!doCheck) {
+            return {
+                message: "No admin privalages"
+            }
+        }
+        return {
+            isAdmin: true
+        }
+
+    },
+    addProduct: async function (product) {
+        // check item exist
+        const itemExist = await foodModel.findOne({
+            name: product.name
+        })
+        if (itemExist) return{
+           message:"item Exist",
+           name:null,
+           _id:null        }
+        // creating food model
+
+        try {
+            const food = new foodModel({
+                name: product.name,
+                category: product.name,
+                price: product.price
+            })
+            console.log(food);
+            
+            //saving the food model
+             const saveItem= await food.save()
+            
+
+            //returning success or failure message
+            return {
+                message:"Product added successfully",
+                name:saveItem.name,
+                _id:saveItem._id
+            }
+
+        } catch (error) {
+            console.log(error); 
+
+        } 
+ 
+
     }
 
 }
 
 
-module.exports = Functions
+module.exports = Functions 

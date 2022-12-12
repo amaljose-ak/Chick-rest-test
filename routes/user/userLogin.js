@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const { userLog } = require('../../functions/userValidation')
 const funct=require('../../functions/userFunction')
-const { adminLoginVal } = require('../../functions/validation')
+
 
 
 // router.get('/user/login',(req,res)=>{
@@ -9,7 +9,7 @@ const { adminLoginVal } = require('../../functions/validation')
 // })
 
 router.post('/user/login',async  (req,res)=>{
-    const {error}= adminLoginVal(req.body)
+    const {error}= userLog(req.body)
     if(error){
         console.log(error.details[0].message);
     return res.json({

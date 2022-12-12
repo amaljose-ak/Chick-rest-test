@@ -1,6 +1,6 @@
 const express = require('express')
-const {adminRegVal} = require('../../functions/validation')
-const f = require('../../functions/functions')
+const {adminRegVal} = require('../../functions/adminValidation')
+const f = require('../../functions/adminFunctions')
 
 const router = express.Router()
 

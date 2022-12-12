@@ -1,6 +1,6 @@
 const router = require('express').Router()
-const { adminLoginVal } = require('../../functions/validation')
-const  f  = require('../../functions/functions')
+const { adminLoginVal } = require('../../functions/adminValidation')
+const  f  = require('../../functions/adminFunctions')
 
 router.get('/api/admin', (req, res) => {
     res.send('admin login')

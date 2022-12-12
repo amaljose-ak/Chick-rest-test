@@ -8,6 +8,7 @@ const adminLoginrouter=require('./routes/admin/adminLogin')
 const userRouters=require('./routes/user/userRgstr')
 const userRouterLog=require('./routes/user/userLogin')
 const productRouter=require('./routes/admin/product')
+const viewRouter=require('./routes/user/viewProducts')
 
 // middlewares
 app.use(express.json())
@@ -19,6 +20,7 @@ app.use('/chick-rest/login',adminLoginrouter)
 app.use('/chick-rest/api',userRouters)
 app.use('/chick-rest/api',userRouterLog)
 app.use('/chick-rest/api',productRouter)
+app.use('/chick-rest/api/',viewRouter)
 
 
 

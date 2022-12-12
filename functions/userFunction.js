@@ -1,6 +1,7 @@
 const userCollction = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
+const food = require('../models/food')
 
 
 const userFunction = {
@@ -24,19 +25,22 @@ const userFunction = {
             const saveUser = await user.save()
             return {
                 user: 'succesfully saved'
-            }  
+            }
         } catch (error) {
             return "error"
 
         }
     },
     LoginUser: async function (login) {
+        // check user exist
         const userExist = await userCollction.findOne({
-            email:login.email,
+            email: login.email,
         })
         if (!userExist) {
-            return "no user found"
+            return {
+                message:"no user found"
         }
+    }
 
         const verified = await bcrypt.compare(login.password, userExist.password)
 
@@ -60,6 +64,33 @@ const userFunction = {
                 console.log(error);
             }
         }
+
+    },
+    viewProducts: async function () {
+        const product = await food.find()
+        return product
+    },
+    checkUser: async function(data){
+        // check whether the user exist
+        const userExist = await userCollction.findById(data._id)
+console.log(userExist);
+        //if not user
+        if(!userExist){
+            return {
+                isUser:false
+            }
+        }
+
+    // if user
+
+if(userExist){
+
+    return {
+        isUser:true,
+
+
+    }
+}
 
     }
 }
