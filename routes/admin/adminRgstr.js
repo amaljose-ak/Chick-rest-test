@@ -14,7 +14,7 @@ router.get('/api/admin', (req, res) => {
 //Registration for admin
 
 router.post('/api/admin', async (req, res) => {
-
+ 
     // validating the entered data
 
     const { error } = adminRegVal(req.body)

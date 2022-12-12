@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 const { findOne } = require('../models/admin')
 const foodModel = require('../models/food')
+const { object } = require('joi')
+const { brotliCompressSync } = require('zlib')
 
 
 
@@ -127,7 +129,40 @@ const Functions = {
         } 
  
 
+    },
+    updateProduct: async function (data,body){
+        var isProduct=false
+
+        const product=await foodModel.findById(data.id)
+        console.log(data.id);
+        if (product){
+            isProduct=true
+        }else{
+            return {
+                message:"no item found"
+            }
+        }
+
+        if(isProduct===true){
+           
+            const updateProduct=await foodModel.updateOne({_id:data.id},{
+                $set:{name:body.name,category:body.category,price:body.price}
+                
+            })
+            return {
+                message:"Product updated"
+            }
+           
+        }
+       
+
+    },
+    deleteProduct: async function(id){
+        const product=await foodModel.deleteOne({_id:id})
+        console.log(product); 
+        console.log(id);
     }
+
 
 }
 

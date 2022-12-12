@@ -38,9 +38,9 @@ const userFunction = {
         })
         if (!userExist) {
             return {
-                message:"no user found"
+                message: "no user found"
+            }
         }
-    }
 
         const verified = await bcrypt.compare(login.password, userExist.password)
 
@@ -70,27 +70,54 @@ const userFunction = {
         const product = await food.find()
         return product
     },
-    checkUser: async function(data){
+    checkUser: async function (data) {
         // check whether the user exist
         const userExist = await userCollction.findById(data._id)
-console.log(userExist);
+        console.log(data._id);
+        console.log(userExist);
         //if not user
-        if(!userExist){
+        if (!userExist) {
             return {
-                isUser:false
+                isUser: false
             }
         }
 
-    // if user
+        // if user
 
-if(userExist){
+        if (userExist) {
 
-    return {
-        isUser:true,
+            return {
+                isUser: true,
 
 
-    }
-}
+            }
+        }
+
+    },
+    updateUser: async function (data, body) {
+
+
+
+        const user = await userCollction.findById(data.id)
+        console.log(user)
+        if (user) {
+            
+            const updateUser = await userCollction.updateOne({ _id: data.id }, {
+                $set: { name: body.name, email: body.email }
+            })
+
+            return {
+                message: "user updated successfully"
+            }
+        }else{
+            return {
+                message:"error while updating"
+            }
+        }
+       
+
+
+
 
     }
 }
